@@ -1,9 +1,12 @@
 name: Android CI
 
+permissions:
+  contents: write
+
 on:
   push:
-    branches:
-      - master
+    tags:
+      - v**
   pull_request:
     branches:
       - master
