@@ -1,4 +1,4 @@
-package io.github.drkv333.lookforward.network.dao
+package io.github.drkv333.lookforward.network.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

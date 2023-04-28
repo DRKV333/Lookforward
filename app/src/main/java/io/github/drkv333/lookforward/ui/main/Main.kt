@@ -5,10 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
-import io.github.drkv333.lookforward.network.dao.HolidayResponse
+import io.github.drkv333.lookforward.network.dto.HolidayResponse
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.getValue
-import io.github.drkv333.lookforward.network.dao.HolidayResponseResponseHolidays
+import io.github.drkv333.lookforward.network.dto.HolidayResponseResponseHolidays
 
 @Composable
 fun Main(

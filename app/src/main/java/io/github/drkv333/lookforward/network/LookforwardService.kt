@@ -1,6 +1,6 @@
 package io.github.drkv333.lookforward.network
 
-import io.github.drkv333.lookforward.network.dao.MyHoliday
+import io.github.drkv333.lookforward.network.dto.MyHoliday
 import retrofit2.Call
 import retrofit2.http.*
 

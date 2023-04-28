@@ -1,8 +1,7 @@
 package io.github.drkv333.lookforward.network
 
-import io.github.drkv333.lookforward.network.dao.CountryResponse
-import io.github.drkv333.lookforward.network.dao.HolidayResponse
-import retrofit2.Call
+import io.github.drkv333.lookforward.network.dto.CountryResponse
+import io.github.drkv333.lookforward.network.dto.HolidayResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
