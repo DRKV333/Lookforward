@@ -41,14 +41,16 @@ fun Login(viewModel: LoginViewModel = viewModel()) {
                 OutlinedTextField(
                     value = viewModel.username,
                     onValueChange = { viewModel.username = it },
-                    singleLine = true
+                    singleLine = true,
+                    label = { Text("Username") }
                 )
 
                 OutlinedTextField(
                     value = viewModel.password,
                     onValueChange = { viewModel.password = it },
                     visualTransformation = PasswordVisualTransformation(),
-                    singleLine = true
+                    singleLine = true,
+                    label = { Text("Password") }
                 )
 
                 Row(horizontalArrangement = Arrangement.SpaceBetween) {
