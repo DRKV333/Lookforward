@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.drkv333.lookforward.ui.login.Login
 import io.github.drkv333.lookforward.ui.main.Main
 import io.github.drkv333.lookforward.ui.theme.LookforwardTheme
 
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Main()
+                    Login()
                 }
             }
         }
