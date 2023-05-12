@@ -68,10 +68,6 @@ fun Main(
         Column(
             modifier = Modifier.padding(contentPadding)
         ) {
-            val holidayList = viewModel.holidayList.collectAsState(listOf())
-            val firstHoliday = viewModel.firstHoliday.collectAsState(null)
-            val firstHolidayTimeLeft = viewModel.firstHolidayTimeLeft.collectAsState(0)
-
             if (viewModel.loading) {
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -89,7 +85,7 @@ fun Main(
                         .padding(10.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = firstHoliday.value?.kind?.iconResource ?: R.drawable.othericon),
+                        painter = painterResource(id = viewModel.firstHoliday?.kind?.iconResource ?: R.drawable.othericon),
                         contentDescription = "",
                         contentScale = ContentScale.FillBounds,
                         modifier = Modifier
@@ -99,14 +95,14 @@ fun Main(
                     )
 
                     Column {
-                        Text(firstHoliday.value?.title ?: "", fontSize = 25.sp)
-                        Text(firstHoliday.value?.let { DateFormat.getDateInstance(DateFormat.DEFAULT).format(it.date) } ?: "", fontSize = 20.sp)
-                        Text("In ${firstHolidayTimeLeft.value} days", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                        Text(viewModel.firstHoliday?.title ?: "", fontSize = 25.sp)
+                        Text(viewModel.firstHoliday?.let { DateFormat.getDateInstance(DateFormat.DEFAULT).format(it.date) } ?: "", fontSize = 20.sp)
+                        Text("In ${viewModel.firstHolidayTimeLeft} days", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     }
                 }
 
                 LazyColumn {
-                    items(holidayList.value) { item ->
+                    items(viewModel.holidayList) { item ->
                         Row(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically,
