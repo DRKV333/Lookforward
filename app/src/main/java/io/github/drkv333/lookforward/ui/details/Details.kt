@@ -1,5 +1,7 @@
 package io.github.drkv333.lookforward.ui.details
 
+import android.app.DatePickerDialog
+import android.widget.DatePicker
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -10,12 +12,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import io.github.drkv333.lookforward.model.HolidayKind
 import io.github.drkv333.lookforward.model.iconResource
 import io.github.drkv333.lookforward.navigateReplace
 import java.text.DateFormat
@@ -82,8 +86,32 @@ fun Details(
                 )
 
                 if (editing) {
-                    IconButton(onClick = { /* TODO */ }) {
-                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Select Type")
+                    var typeSelectionOpen by remember { mutableStateOf(false) }
+                    Box {
+                        IconButton(onClick = { typeSelectionOpen = true }) {
+                            Icon(imageVector = Icons.Default.Edit, contentDescription = "Select Type")
+                        }
+
+                        DropdownMenu(expanded = typeSelectionOpen, onDismissRequest = { typeSelectionOpen = false }) {
+                            @Composable
+                            fun DropdownRadioItem(thisKind: HolidayKind, label: String) {
+                                DropdownMenuItem(text = {
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        RadioButton(
+                                            selected = viewModel.kind == thisKind,
+                                            enabled = false,
+                                            onClick = { }
+                                        )
+                                        Text(label)
+                                    }
+                                }, onClick = { viewModel.kind = thisKind })
+                            }
+
+                            DropdownRadioItem(thisKind = HolidayKind.NATIONAL, label = "National")
+                            DropdownRadioItem(thisKind = HolidayKind.OBSERVANCE, label = "Observance")
+                            DropdownRadioItem(thisKind = HolidayKind.SEASON, label = "Season")
+                            DropdownRadioItem(thisKind = HolidayKind.OTHER, label = "Other")
+                        }
                     }
                 }
             }
@@ -121,7 +149,25 @@ fun Details(
                 )
 
                 if (editing) {
-                    IconButton(onClick = { /* TODO */ }) {
+                    val datePicker = Calendar.getInstance().let { calendar ->
+                        calendar.time = viewModel.date
+
+                        DatePickerDialog(
+                            LocalContext.current,
+                            { _: DatePicker, year: Int, month: Int, day: Int ->
+                                viewModel.date = Calendar.getInstance().apply {
+                                    set(Calendar.YEAR, year)
+                                    set(Calendar.MONTH, month)
+                                    set(Calendar.DAY_OF_MONTH, day)
+                                }.time
+                            },
+                            calendar.get(Calendar.YEAR),
+                            calendar.get(Calendar.MONTH),
+                            calendar.get(Calendar.DAY_OF_MONTH)
+                        )
+                    }
+
+                    IconButton(onClick = { datePicker.show() }) {
                         Icon(
                             imageVector = Icons.Default.DateRange,
                             contentDescription = "Select Date"
