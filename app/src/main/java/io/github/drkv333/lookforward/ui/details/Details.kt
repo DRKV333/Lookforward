@@ -73,15 +73,19 @@ fun Details(
                     .fillMaxWidth()
                     .padding(10.dp)
             ) {
-                Image(
-                    painter = painterResource(id = viewModel.kind.iconResource),
-                    contentDescription = "",
-                    contentScale = ContentScale.FillBounds,
-                    modifier = Modifier
-                        .width(150.dp)
-                        .height(150.dp)
-                        .padding(end = 10.dp)
-                )
+                if (viewModel.loading) {
+                    CircularProgressIndicator()
+                } else {
+                    Image(
+                        painter = painterResource(id = viewModel.kind.iconResource),
+                        contentDescription = "",
+                        contentScale = ContentScale.FillBounds,
+                        modifier = Modifier
+                            .width(150.dp)
+                            .height(150.dp)
+                            .padding(end = 10.dp)
+                    )
+                }
 
                 if (viewModel.editing) {
                     var typeSelectionOpen by remember { mutableStateOf(false) }
