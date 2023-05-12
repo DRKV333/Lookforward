@@ -11,34 +11,52 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.github.drkv333.lookforward.R
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import io.github.drkv333.lookforward.model.iconResource
+import io.github.drkv333.lookforward.navigateReplace
+import java.text.DateFormat
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Details() {
+fun Details(
+    navController: NavController,
+    viewModel: DetailsViewModel = hiltViewModel()
+) {
     var editing by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             SmallTopAppBar(
-                title = { Text("New Year's Day") },
+                title = { Text(viewModel.title) },
                 actions = {
                     if (editing) {
-                        IconButton(onClick = { editing = false }) {
+                        IconButton(onClick = {
+                            viewModel.save()
+                            editing = false
+                        }) {
                             Icon(imageVector = Icons.Default.Done, contentDescription = "Done", tint = Color.White)
                         }
                     } else {
-                        IconButton(onClick = { editing = false }) {
+                        IconButton(onClick = {
+                            viewModel.delete()
+                            navController.navigateReplace("main")
+                        }) {
                             Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete", tint = Color.White)
                         }
 
                         IconButton(onClick = { editing = true }) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit", tint = Color.White)
                         }
+                    }
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigateReplace("main") }) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
                     }
                 }
             )
@@ -54,7 +72,7 @@ fun Details() {
                     .padding(10.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.othericon),
+                    painter = painterResource(id = viewModel.kind.iconResource),
                     contentDescription = "",
                     contentScale = ContentScale.FillBounds,
                     modifier = Modifier
@@ -72,30 +90,32 @@ fun Details() {
 
             if (editing) {
                 OutlinedTextField(
-                    value = "New Year's Day",
-                    onValueChange = { /* TODO */ },
+                    value = viewModel.title,
+                    onValueChange = { viewModel.title = it },
                     singleLine = true,
+                    colors = TextFieldDefaults.textFieldColors(textColor = Color.Black),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp)
                 )
                 OutlinedTextField(
-                    value = "This is very long bit of text that will hopefully be broken into multiple separate lines.",
-                    onValueChange = { /* TODO */ },
+                    value = viewModel.description,
+                    onValueChange = { viewModel.description = it },
+                    colors = TextFieldDefaults.textFieldColors(textColor = Color.Black),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp)
                 )
             } else {
                 Text(
-                    "This is very long bit of text that will hopefully be broken into multiple separate lines.",
+                    viewModel.description,
                     textAlign = TextAlign.Justify,
                     modifier = Modifier.padding(10.dp)
                 )
             }
 
             Row {
-                Text("2024.01.01",
+                Text(DateFormat.getDateInstance(DateFormat.DEFAULT).format(viewModel.date),
                     fontSize = 20.sp,
                     modifier = Modifier.padding(10.dp)
                 )

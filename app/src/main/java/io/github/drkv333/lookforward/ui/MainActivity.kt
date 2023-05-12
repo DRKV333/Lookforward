@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.drkv333.lookforward.ui.details.Details
 import io.github.drkv333.lookforward.ui.login.Login
@@ -31,7 +32,12 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController = navController, startDestination = "login") {
                         composable("login") { Login(navController) }
                         composable("main") { Main(navController) }
-                        composable("details") { Details() }
+                        composable(
+                            "details?id={id}",
+                            arguments = listOf(navArgument("id") { defaultValue = "" })
+                        ) {
+                            Details(navController)
+                        }
                     }
                 }
             }

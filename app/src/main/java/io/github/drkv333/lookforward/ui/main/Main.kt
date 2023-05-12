@@ -112,7 +112,7 @@ fun Main(
                                 .border(1.dp, Color.Black)
                                 .padding(5.dp)
                                 .clickable {
-                                    // TODO
+                                    navController.navigateReplace("details?id=${item.id}")
                                 }
                         ) {
                             Image(
