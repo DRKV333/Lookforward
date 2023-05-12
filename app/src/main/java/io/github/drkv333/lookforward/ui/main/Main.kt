@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import io.github.drkv333.lookforward.R
-import io.github.drkv333.lookforward.model.Holiday
+import io.github.drkv333.lookforward.model.iconResource
 import io.github.drkv333.lookforward.navigateReplace
 import java.text.DateFormat
 import java.util.*
@@ -89,7 +89,7 @@ fun Main(
                         .padding(10.dp)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.othericon),
+                        painter = painterResource(id = firstHoliday.value?.kind?.iconResource ?: R.drawable.othericon),
                         contentDescription = "",
                         contentScale = ContentScale.FillBounds,
                         modifier = Modifier
@@ -120,7 +120,7 @@ fun Main(
                                 }
                         ) {
                             Image(
-                                painter = painterResource(id = R.drawable.nationalicon),
+                                painter = painterResource(id = item.kind.iconResource),
                                 contentDescription = "",
                                 contentScale = ContentScale.FillBounds,
                                 modifier = Modifier
