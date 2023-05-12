@@ -6,8 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,60 +24,71 @@ fun Login(
     navController: NavController,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+    var showEverything by remember { mutableStateOf(false) }
+
     LaunchedEffect(viewModel) {
         if (viewModel.autoLogin()) {
             navController.navigateReplace("main")
+        } else {
+            showEverything = true
         }
     }
 
-    Box {
-        Image(
-            painter = painterResource(id = R.drawable.loginbg),
-            contentDescription = "",
-            contentScale = ContentScale.FillHeight,
-            modifier = Modifier.fillMaxSize()
-        )
+    if (showEverything) {
+        Box {
+            Image(
+                painter = painterResource(id = R.drawable.loginbg),
+                contentDescription = "",
+                contentScale = ContentScale.FillHeight,
+                modifier = Modifier.fillMaxSize()
+            )
 
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .background(Color.LightGray)
-                    .padding(10.dp)
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
             ) {
-                OutlinedTextField(
-                    value = viewModel.username,
-                    onValueChange = { viewModel.username = it },
-                    singleLine = true,
-                    label = { Text("Username") }
-                )
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .background(Color.LightGray)
+                        .padding(10.dp)
+                ) {
+                    OutlinedTextField(
+                        value = viewModel.username,
+                        onValueChange = { viewModel.username = it },
+                        singleLine = true,
+                        colors = TextFieldDefaults.textFieldColors(textColor = Color.Black),
+                        label = { Text("Username") }
+                    )
 
-                OutlinedTextField(
-                    value = viewModel.password,
-                    onValueChange = { viewModel.password = it },
-                    visualTransformation = PasswordVisualTransformation(),
-                    singleLine = true,
-                    label = { Text("Password") }
-                )
+                    OutlinedTextField(
+                        value = viewModel.password,
+                        onValueChange = { viewModel.password = it },
+                        visualTransformation = PasswordVisualTransformation(),
+                        singleLine = true,
+                        colors = TextFieldDefaults.textFieldColors(textColor = Color.Black),
+                        label = { Text("Password") }
+                    )
 
-                Row(horizontalArrangement = Arrangement.SpaceBetween) {
-                    TextButton(onClick = {
-                        navController.navigateReplace("main")
-                    }) {
-                        Text("Maybe later...")
-                    }
+                    Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                        TextButton(onClick = {
+                            navController.navigateReplace("main")
+                        }) {
+                            Text("Maybe later...")
+                        }
 
-                    OutlinedButton(onClick = {
-                        viewModel.login()
-                        navController.navigateReplace("main")
-                    }) {
-                        Row {
-                            Text("Login")
-                            Icon(imageVector = Icons.Default.ArrowForward, contentDescription = "")
+                        OutlinedButton(onClick = {
+                            viewModel.login()
+                            navController.navigateReplace("main")
+                        }) {
+                            Row {
+                                Text("Login")
+                                Icon(
+                                    imageVector = Icons.Default.ArrowForward,
+                                    contentDescription = ""
+                                )
+                            }
                         }
                     }
                 }
