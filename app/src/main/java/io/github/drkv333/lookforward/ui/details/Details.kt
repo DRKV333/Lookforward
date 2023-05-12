@@ -31,17 +31,15 @@ fun Details(
     navController: NavController,
     viewModel: DetailsViewModel = hiltViewModel()
 ) {
-    var editing by remember { mutableStateOf(false) }
-
     Scaffold(
         topBar = {
             SmallTopAppBar(
                 title = { Text(viewModel.title) },
                 actions = {
-                    if (editing) {
+                    if (viewModel.editing) {
                         IconButton(onClick = {
                             viewModel.save()
-                            editing = false
+                            viewModel.editing = false
                         }) {
                             Icon(imageVector = Icons.Default.Done, contentDescription = "Done", tint = Color.White)
                         }
@@ -53,7 +51,7 @@ fun Details(
                             Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete", tint = Color.White)
                         }
 
-                        IconButton(onClick = { editing = true }) {
+                        IconButton(onClick = { viewModel.editing = true }) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit", tint = Color.White)
                         }
                     }
@@ -85,7 +83,7 @@ fun Details(
                         .padding(end = 10.dp)
                 )
 
-                if (editing) {
+                if (viewModel.editing) {
                     var typeSelectionOpen by remember { mutableStateOf(false) }
                     Box {
                         IconButton(onClick = { typeSelectionOpen = true }) {
@@ -116,7 +114,7 @@ fun Details(
                 }
             }
 
-            if (editing) {
+            if (viewModel.editing) {
                 OutlinedTextField(
                     value = viewModel.title,
                     onValueChange = { viewModel.title = it },
@@ -148,7 +146,7 @@ fun Details(
                     modifier = Modifier.padding(10.dp)
                 )
 
-                if (editing) {
+                if (viewModel.editing) {
                     val datePicker = Calendar.getInstance().let { calendar ->
                         calendar.time = viewModel.date
 

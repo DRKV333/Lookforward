@@ -18,9 +18,11 @@ class DetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val detailsRepository: DetailsRepository
 ) : ViewModel() {
-    val id: UUID = UUID.fromString(savedStateHandle["id"])
+    private var id: UUID
+    private var isCreating: Boolean
 
     var loading by mutableStateOf(true)
+    var editing by mutableStateOf(false)
 
     var title by mutableStateOf("")
     var description by mutableStateOf("")
@@ -28,13 +30,31 @@ class DetailsViewModel @Inject constructor(
     var date by mutableStateOf(Date())
 
     init {
-        viewModelScope.launch {
-            val holiday = detailsRepository.loadHolidayById(id)
-            title = holiday.title
-            description = holiday.description
-            kind = holiday.kind
-            date = holiday.date
-            loading = false
+        val idParam: String? = savedStateHandle["id"];
+        if (idParam.isNullOrEmpty()) {
+            id = UUID.randomUUID()
+            isCreating = true
+            editing = true
+
+            title = "New Holiday"
+            description = ""
+            kind = HolidayKind.OTHER
+            date = Calendar.getInstance().apply {
+                add(Calendar.DAY_OF_MONTH, 1)
+            }.time
+        } else {
+            id = UUID.fromString(idParam)
+            isCreating = false
+            editing = false
+
+            viewModelScope.launch {
+                val holiday = detailsRepository.loadHolidayById(id)
+                title = holiday.title
+                description = holiday.description
+                kind = holiday.kind
+                date = holiday.date
+                loading = false
+            }
         }
     }
 
@@ -42,13 +62,19 @@ class DetailsViewModel @Inject constructor(
 
     fun save() {
         viewModelScope.launch {
-            detailsRepository.saveHoliday(makeHoliday())
+            if (isCreating) {
+                isCreating = false
+                detailsRepository.createHoliday(makeHoliday())
+            } else {
+                detailsRepository.saveHoliday(makeHoliday())
+            }
         }
     }
 
     fun delete() {
         viewModelScope.launch {
-            detailsRepository.deleteHoliday(makeHoliday())
+            if (!isCreating)
+                detailsRepository.deleteHoliday(makeHoliday())
         }
     }
 }

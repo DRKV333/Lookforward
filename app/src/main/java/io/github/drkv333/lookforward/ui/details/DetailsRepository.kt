@@ -17,6 +17,10 @@ class DetailsRepository(
         holidayDao.update(holiday)
     }
 
+    suspend fun createHoliday(holiday: Holiday) = withContext(Dispatchers.IO) {
+        holidayDao.insert(holiday)
+    }
+
     suspend fun deleteHoliday(holiday: Holiday) = withContext(Dispatchers.IO) {
         holidayDao.delete(holiday)
     }

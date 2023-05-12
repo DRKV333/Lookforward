@@ -41,7 +41,7 @@ fun Main(
                 actions = {
                     var showMenu by remember { mutableStateOf(false) }
 
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { navController.navigateReplace("details") }) {
                         Icon(imageVector = Icons.Default.Add, contentDescription = "Create", tint = Color.White)
                     }
 
