@@ -175,17 +175,6 @@ fun Details(
                     }
                 }
             }
-
-            if (!editing) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Switch(
-                        checked = false,
-                        onCheckedChange = { /* TODO */ },
-                        modifier = Modifier.padding(10.dp)
-                    )
-                    Text("Remind me")
-                }
-            }
         }
     }
 }
