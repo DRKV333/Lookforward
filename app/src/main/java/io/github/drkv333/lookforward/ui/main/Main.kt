@@ -28,12 +28,6 @@ import io.github.drkv333.lookforward.navigateReplace
 import java.text.DateFormat
 import java.util.*
 
-private val testItems = arrayOf(
-    Holiday("New Year's Day 1", "", Date(2024, 1, 1)),
-    Holiday("New Year's Day 2", "", Date(2024, 1, 1)),
-    Holiday("New Year's Day 3", "", Date(2024, 1, 1))
-)
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Main(
@@ -74,54 +68,68 @@ fun Main(
         Column(
             modifier = Modifier.padding(contentPadding)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color.LightGray)
-                    .border(4.dp, Color.Black)
-                    .padding(10.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.othericon),
-                    contentDescription = "",
-                    contentScale = ContentScale.FillBounds,
-                    modifier = Modifier
-                        .width(150.dp)
-                        .height(150.dp)
-                        .padding(end = 10.dp)
-                )
+            val holidayList = viewModel.holidayList.collectAsState(listOf())
+            val firstHoliday = viewModel.firstHoliday.collectAsState(null)
+            val firstHolidayTimeLeft = viewModel.firstHolidayTimeLeft.collectAsState(0)
 
-                Column {
-                    Text("New Year's Eve", fontSize = 25.sp)
-                    Text("3024.01.01", fontSize = 20.sp)
-                    Text("In 365 days", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            if (viewModel.loading) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    CircularProgressIndicator()
                 }
-            }
-
-            LazyColumn {
-                items(testItems) { item ->
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
+            } else {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.LightGray)
+                        .border(4.dp, Color.Black)
+                        .padding(10.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.othericon),
+                        contentDescription = "",
+                        contentScale = ContentScale.FillBounds,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(1.dp)
-                            .border(1.dp, Color.Black)
-                            .padding(5.dp)
-                            .clickable {
-                                // TODO
-                            }
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.nationalicon),
-                            contentDescription = "",
-                            contentScale = ContentScale.FillBounds,
+                            .width(150.dp)
+                            .height(150.dp)
+                            .padding(end = 10.dp)
+                    )
+
+                    Column {
+                        Text(firstHoliday.value?.title ?: "", fontSize = 25.sp)
+                        Text(firstHoliday.value?.let { DateFormat.getDateInstance(DateFormat.DEFAULT).format(it.date) } ?: "", fontSize = 20.sp)
+                        Text("In ${firstHolidayTimeLeft.value} days", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    }
+                }
+
+                LazyColumn {
+                    items(holidayList.value) { item ->
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
-                                .width(50.dp)
-                                .height(50.dp)
-                        )
-                        Text(item.title)
-                        Text(DateFormat.getDateInstance(DateFormat.SHORT).format(item.date))
+                                .fillMaxWidth()
+                                .padding(1.dp)
+                                .border(1.dp, Color.Black)
+                                .padding(5.dp)
+                                .clickable {
+                                    // TODO
+                                }
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.nationalicon),
+                                contentDescription = "",
+                                contentScale = ContentScale.FillBounds,
+                                modifier = Modifier
+                                    .width(50.dp)
+                                    .height(50.dp)
+                            )
+                            Text(item.title)
+                            Text(DateFormat.getDateInstance(DateFormat.SHORT).format(item.date))
+                        }
                     }
                 }
             }
