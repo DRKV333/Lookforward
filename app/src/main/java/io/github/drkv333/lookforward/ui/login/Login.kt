@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,11 +15,22 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import io.github.drkv333.lookforward.R
+import io.github.drkv333.lookforward.navigateReplace
 
 @Composable
-fun Login(viewModel: LoginViewModel = viewModel()) {
+fun Login(
+    navController: NavController,
+    viewModel: LoginViewModel = hiltViewModel()
+) {
+    LaunchedEffect(viewModel) {
+        if (viewModel.autoLogin()) {
+            navController.navigateReplace("main")
+        }
+    }
+
     Box {
         Image(
             painter = painterResource(id = R.drawable.loginbg),
@@ -54,11 +66,16 @@ fun Login(viewModel: LoginViewModel = viewModel()) {
                 )
 
                 Row(horizontalArrangement = Arrangement.SpaceBetween) {
-                    TextButton(onClick = { /*TODO*/ }) {
+                    TextButton(onClick = {
+                        navController.navigateReplace("main")
+                    }) {
                         Text("Maybe later...")
                     }
 
-                    OutlinedButton(onClick = { /*TODO*/ },) {
+                    OutlinedButton(onClick = {
+                        viewModel.login()
+                        navController.navigateReplace("main")
+                    }) {
                         Row {
                             Text("Login")
                             Icon(imageVector = Icons.Default.ArrowForward, contentDescription = "")

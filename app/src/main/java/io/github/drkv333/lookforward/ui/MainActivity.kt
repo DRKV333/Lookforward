@@ -6,10 +6,12 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.drkv333.lookforward.ui.details.Details
 import io.github.drkv333.lookforward.ui.login.Login
 import io.github.drkv333.lookforward.ui.main.Main
 import io.github.drkv333.lookforward.ui.theme.LookforwardTheme
@@ -25,17 +27,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Login()
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = "login") {
+                        composable("login") { Login(navController) }
+                        composable("main") { Main(navController) }
+                        composable("details") { Details() }
+                    }
                 }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    LookforwardTheme {
-        Main()
     }
 }

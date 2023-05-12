@@ -15,7 +15,7 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
 
     companion object {
-        private val IS_LOGGED_IN_KEY = "IS_LOGGED_IN"
+        const val IS_LOGGED_IN_KEY = "IS_LOGGED_IN"
     }
 
     var username by mutableStateOf("")

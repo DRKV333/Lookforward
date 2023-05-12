@@ -20,9 +20,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import io.github.drkv333.lookforward.R
 import io.github.drkv333.lookforward.model.Holiday
+import io.github.drkv333.lookforward.navigateReplace
 import java.text.DateFormat
 import java.util.*
 
@@ -35,7 +37,8 @@ private val testItems = arrayOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Main(
-    viewModel: MainViewModel = viewModel()
+    navController: NavController,
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     Scaffold(
         topBar = {
@@ -53,7 +56,16 @@ fun Main(
                     }
 
                     DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
-                        DropdownMenuItem(text = { Text("Login") }, onClick = { /*TODO*/ })
+                        if (viewModel.isLoggedIn) {
+                            DropdownMenuItem(text = { Text("Logout") }, onClick = {
+                                viewModel.logout()
+                                navController.navigateReplace("login")
+                            })
+                        } else {
+                            DropdownMenuItem(text = { Text("Login") }, onClick = {
+                                navController.navigateReplace("login")
+                            })
+                        }
                     }
                 }
             )
