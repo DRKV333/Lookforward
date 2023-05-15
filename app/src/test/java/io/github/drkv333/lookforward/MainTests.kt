@@ -17,6 +17,7 @@ import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -54,7 +55,8 @@ class MainTests {
         val mainRepository = MainRepository(mockCalendarificService, mockHolidayDao)
         val result = mainRepository.loadHolidayList()
 
-        assert(result.size == 1 && result[0].id == testHoliday.id)
+        assertEquals(1, result.size)
+        assertEquals(result[0].id, testHoliday.id)
         coVerify { mockHolidayDao.getAll() }
         coVerify { mockCalendarificService.holidaysGet(any(), any()) wasNot called }
     }
@@ -68,7 +70,8 @@ class MainTests {
         val mainRepository = MainRepository(mockCalendarificService, mockHolidayDao)
         val result = mainRepository.loadHolidayList()
 
-        assert(result.size == 1 && result[0].title == testHoliday.name)
+        assertEquals(1, result.size)
+        assertEquals(testHoliday.name, result[0].title)
         coVerify { mockCalendarificService.holidaysGet(any(), any()) }
     }
 
@@ -81,8 +84,9 @@ class MainTests {
         val mainViewModel = MainViewModel(mockSharedPreferences, mockMainRepository)
         mainDispatcherRule.runCurrent()
 
-        assert(mainViewModel.holidayList.size == 1 && mainViewModel.holidayList[0].id == testHoliday.id)
-        assert(mainViewModel.firstHoliday?.id == testHoliday.id)
+        assertEquals(1, mainViewModel.holidayList.size)
+        assertEquals(testHoliday.id, mainViewModel.holidayList[0].id)
+        assertEquals(testHoliday.id, mainViewModel.firstHoliday?.id)
         assert(mainViewModel.firstHolidayTimeLeft > 0L)
     }
 

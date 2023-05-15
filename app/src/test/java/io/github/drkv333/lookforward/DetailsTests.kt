@@ -10,6 +10,7 @@ import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -40,7 +41,7 @@ class DetailsTests {
 
         val detailsRepository = DetailsRepository(mockHolidayDao)
 
-        assert(detailsRepository.loadHolidayById(testHoliday.id).id == testHoliday.id)
+        assertEquals(testHoliday.id, detailsRepository.loadHolidayById(testHoliday.id).id)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -86,7 +87,7 @@ class DetailsTests {
         val detailsViewModel = DetailsViewModel(mockSavedStateHandle, mockDetailsRepository)
         mainDispatcherRule.runCurrent()
 
-        assert(detailsViewModel.title == "test")
+        assertEquals("test", detailsViewModel.title)
         assert(!detailsViewModel.editing)
 
         val modifiedTitle = "modified title"
@@ -96,8 +97,8 @@ class DetailsTests {
 
         val modifiedHoliday = slot<Holiday>()
         coVerify { mockDetailsRepository.saveHoliday(capture(modifiedHoliday)) }
-        assert(modifiedHoliday.captured.title == modifiedTitle)
-        assert(modifiedHoliday.captured.id == testHoliday.id)
+        assertEquals(modifiedTitle, modifiedHoliday.captured.title)
+        assertEquals(testHoliday.id, modifiedHoliday.captured.id)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -113,7 +114,7 @@ class DetailsTests {
         detailsViewModel.delete()
         mainDispatcherRule.runCurrent()
 
-        coVerify { mockDetailsRepository.deleteHoliday(withArg { holiday -> assert(holiday.id == testHoliday.id) }) }
+        coVerify { mockDetailsRepository.deleteHoliday(withArg { holiday -> assertEquals(testHoliday.id, holiday.id) }) }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
