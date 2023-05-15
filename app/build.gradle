@@ -86,6 +86,7 @@ dependencies {
 
     testImplementation 'io.mockk:mockk:1.12.8'
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
+    testImplementation 'io.github.ivanshafran:shared-preferences-mock:1.2.4'
 }
 
 // Allow references to generated code
