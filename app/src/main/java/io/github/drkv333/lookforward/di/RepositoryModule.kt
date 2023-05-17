@@ -5,6 +5,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.github.drkv333.lookforward.network.CalendarificService
+import io.github.drkv333.lookforward.persistence.HolidayDao
+import io.github.drkv333.lookforward.ui.details.DetailsRepository
 import io.github.drkv333.lookforward.ui.main.MainRepository
 import javax.inject.Singleton
 
@@ -13,6 +15,11 @@ import javax.inject.Singleton
 object RepositoryModule {
     @Provides
     @Singleton
-    fun provideMainRepository(calendarificService: CalendarificService): MainRepository =
-        MainRepository(calendarificService)
+    fun provideMainRepository(calendarificService: CalendarificService, holidayDao: HolidayDao): MainRepository =
+        MainRepository(calendarificService, holidayDao)
+
+    @Provides
+    @Singleton
+    fun provideDetailsRepository(holidayDao: HolidayDao): DetailsRepository =
+        DetailsRepository(holidayDao)
 }
