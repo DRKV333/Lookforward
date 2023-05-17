@@ -42,6 +42,8 @@ class DetailsViewModel @Inject constructor(
             date = Calendar.getInstance().apply {
                 add(Calendar.DAY_OF_MONTH, 1)
             }.time
+
+            loading = false
         } else {
             id = UUID.fromString(idParam)
             isCreating = false
