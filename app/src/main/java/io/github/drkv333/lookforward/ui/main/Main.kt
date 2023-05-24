@@ -60,6 +60,10 @@ fun Main(
                                 navController.navigateReplace("login")
                             })
                         }
+
+                        DropdownMenuItem(text = { Text("Crash the App") }, onClick = {
+                            error("This is a test exception")
+                        })
                     }
                 }
             )
